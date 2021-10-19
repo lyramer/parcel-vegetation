@@ -1,23 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
+import { Map, MapLayer} from './Components/Map';
+import osm from './Components/DataSources/osm'
+
+// import map config details
+import * as mapConfig from "./config.json";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Map {...mapConfig.view}>
+          <MapLayer layer={{type: "Tile", source:osm()}}/>
+          </Map>
     </div>
   );
 }

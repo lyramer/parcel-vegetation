@@ -1,6 +1,16 @@
-# Getting Started with Create React App
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It makes use of the [walkthrough by Matthew Brown](https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744) on implementing [OpenLayers](https://openlayers.org/) in React, but I tried to pull as much of the code and structure from the [Simcoe County Web Viewer](https://github.com/county-of-simcoe-gis/SimcoeCountyWebViewer/tree/master/docs) so that we might be better able to pull in some of the many features from that expansive and well-featured project.* 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+*There are very odd structural choices made in the SCWV which I will not be following, and I advise doing research before you follow their implementation to the letter. Notably, calling ReactDOM.render() multiple times throughout the project, and the avoidance of using 
+
+## Getting Up and Running
+
+First off, make sure you're running npm 6.14.14, and node 14.17.5. If you type `npm -v` or `node -v` and you get different versions, [follow the install instructions for nvm](https://github.com/nvm-sh/nvm) and then follow the same guide on how to install and use the correct versions of npm and node in your project directory.
+
+*Not following these instructions will lead to weird behaviour, including failures to compile which will make you think it's an issue with some package or another. I am speaking from personal experience here. Do not skip this step; you'll spend days debugging weird errors until you figure out that it has nothing to do with Babel or Sass or react-scripts or whatever it is saying*
+
+Once you've done this, navigate to your project root and run `npm install`. 
+
+
 
 ## Available Scripts
 
