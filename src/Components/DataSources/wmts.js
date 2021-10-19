@@ -5,9 +5,8 @@ import WMTSCapabilities from 'ol/format/WMTSCapabilities';
 import WMTSRequestEncoding from 'ol/source/WMTSRequestEncoding';
 
 // note that this is only a bare bones implementation; 
-// see github.com/lyramer/navigator for a more fully featured (and working)
-// example.
-
+// see github.com/lyramer/navigator for a more fully featured (and)
+const ZOOM = 18;
 var parser = new WMTSCapabilities();
 
 async function wmts(text) {

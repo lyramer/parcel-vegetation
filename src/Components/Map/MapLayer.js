@@ -1,11 +1,11 @@
 import React from "react";
-import { TileLayer, RasterLayer } from "../Layers";
+import { TileLayer, RasterLayer, VectorLayer } from "../Layers";
 import Static from 'ol/source/ImageStatic';
 
 
 function MapLayer(props) {
 
-    const {type, source, projection, extent, display, ...other} = props.layer;
+    const {type, source, projection, extent, display, style, ...other} = props;
 
     // note that I'm specifically using a test against falsity
     // so that if you don't define display, it doesn't return falsey
@@ -20,7 +20,7 @@ function MapLayer(props) {
             })
             return (<RasterLayer source={img} />)
         case "Vector":
-            // TO DO
+            return (<VectorLayer source={source} zIndex={0} style={style}/>)
         case "Tile":
             return (<TileLayer source={source} zIndex={0} />)
         default:

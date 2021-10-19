@@ -1,11 +1,11 @@
-import vector from "./vector";
 import xyz from "./xyz";
 import osm from "./osm";
 import wmts from "./wmts";
+import toVector from "./toVector";
 
 export {
-	vector,
 	xyz,
 	osm,
+	toVector,
 	wmts
 };
