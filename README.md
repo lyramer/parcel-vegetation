@@ -17,7 +17,7 @@ After its done installing, running `npm start` should spin it up on your local p
 
 The config.json file will probably come quite in handy.
 
-I've put in the bones for you to throw in a Vector layer or a Raster layer; their types according to MapLayer would be "Vector" and "Raster" respectively, and their sources should 
+I've put in the bones for you to throw in a Vector layer or a Raster layer; their types according to MapLayer would be "Vector" and "Raster" respectively, and their sources should be digested through the DataSources components (for example, using toVector to digest your geojson feature or featurecollection into an OL-friendly format). There is an example of using an alternate WMTS server rather than osm [on my Navigator project](https://github.com/lyramer/navigator).
 
 
 ## Available Scripts
