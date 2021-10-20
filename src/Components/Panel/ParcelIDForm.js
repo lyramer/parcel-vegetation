@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import "./panel.css";
 
 class ParcelIDForm extends React.Component {
@@ -28,7 +28,7 @@ class ParcelIDForm extends React.Component {
                     placeholder={"Parcel ID"}
                 />        
             </label>
-            <input type="submit" value="Search" />
+            <button type="submit" className="search" value="Search"><i class="fas fa-search"></i></button>
         </form>
       );
     }
