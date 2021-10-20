@@ -1,4 +1,5 @@
 import React from "react";
+import "./panel.css";
 
 class ParcelIDForm extends React.Component {
     constructor(props) {

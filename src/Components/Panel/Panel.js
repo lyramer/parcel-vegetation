@@ -1,11 +1,12 @@
 import ParcelIDForm from "./ParcelIDForm";
+import LayerSelect from "./LayerSelect";
 
-function Panel(props) {
+const Panel = ({children}) => {
     return (
         <div className={"panel"}>
-            <ParcelIDForm {...props} />
+            {children}
         </div>
-    )
+    );
 }
 
 export default Panel;
