@@ -5,6 +5,17 @@ import { Map, MapLayer} from './Components/Map';
 import { osm, toVector} from './Components/DataSources'
 import FeatureStyles from './Components/Map/FeatureStyles';
 
+
+// import connect secrets
+require('dotenv').config();
+
+// connect postGIS DB
+//const { Pool, Client } = require('pg');
+
+//test it (pull this out)
+//Client = new Client();
+//console.log()
+
 // import map config details
 let mapConfig = require('./config.json');
 
