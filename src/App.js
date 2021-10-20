@@ -5,21 +5,21 @@ import { Map, MapLayer} from './Components/Map';
 import { osm, wms, toVector} from './Components/DataSources'
 import FeatureStyles from './Components/Map/FeatureStyles';
 import { fromLonLat } from 'ol/proj';
-
+import { TileArcGISRest, ImageArcGISRest} from 'ol/source';
 const layers = [
   {
     "id": "osm",
     "name": "Open Street Map",
     "type": "Tile",
-    "source": osm(),
     "display": true,
-    "order": "1"
+    "order": "1",
+    "source": osm()
   },
   {
     "id": "bcmosaic",
     "name": "BC Mosaic",
-    "display": false,
     "type": "Tile",
+    "display": false,
     "order": "2",
     "source": 
       wms({
@@ -36,8 +36,14 @@ const layers = [
   {
     "id": "landcover",
     "name": "ESRI 2020 Landcover",
+    "type": "Raster",
     "display": false,
-    "order": "3"
+    "order": "3",
+    "source": new TileArcGISRest({
+      url: "https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/" + "Esri_2020_Land_Cover_V2/ImageServer",
+      ratio: 1,
+      params: {'TOKEN': "P3ePLMYs2RVChkJx"}
+    })
   },
 ];
  
