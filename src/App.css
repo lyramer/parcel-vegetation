@@ -1,6 +1,15 @@
 .App {
   text-align: center;
   height: 100vh;
+  display:flex;
+}
+
+.parcel-form {
+  padding:10px;
+}
+
+.parcel-form input {
+  margin-bottom: 5px;
 }
 
 .App-logo {
