@@ -28,7 +28,8 @@ class ParcelIDForm extends React.Component {
                     placeholder={"Parcel ID"}
                 />        
             </label>
-            <button type="submit" className="search" value="Search"><i class="fas fa-search"></i></button>
+            <button type="submit" className="search" value="Search">
+              <i className="fas fa-search"></i></button>
         </form>
       );
     }

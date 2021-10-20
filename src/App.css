@@ -38,3 +38,20 @@
     transform: rotate(360deg);
   }
 }
+
+.results-text {
+  max-height: 400px;
+  margin: 10px;
+  margin-top: auto;
+  text-align: left;
+}
+
+.results-id {
+  font-weight:bold;
+}
+
+.results-info {
+  overflow-y:auto;
+  border: 1px solid lightgray;
+
+}
