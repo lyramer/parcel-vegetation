@@ -3,7 +3,7 @@ import MapContext from "../Map/MapContext";
 import ImageLayer from "ol/layer/Image";
 
 
-const RasterLayer = ({ source, style, zIndex = 2 }) => {
+const RasterLayer = ({ source, style, zIndex = 2}) => {
 	const { map } = useContext(MapContext);
 
 	useEffect(() => {

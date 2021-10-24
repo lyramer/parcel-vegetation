@@ -2,17 +2,19 @@ import React, {Component} from "react";
 import './App.css';
 import { Panel, ParcelIDForm, LayerSelect } from "./Components/Panel"
 import { Map, MapLayer} from './Components/Map';
-import { osm, wms, toVector} from './Components/DataSources'
+import { osm, wms, toVector, xyz} from './Components/DataSources'
 import FeatureStyles from './Components/Map/FeatureStyles';
 import { fromLonLat } from 'ol/proj';
-import { TileArcGISRest, ImageArcGISRest} from 'ol/source';
+import { TileArcGISRest, ImageArcGISRest } from 'ol/source';
+
+
 const layers = [
   {
     "id": "osm",
     "name": "Open Street Map",
     "type": "Tile",
     "display": true,
-    "order": "1",
+    "order": 1,
     "source": osm()
   },
   {
@@ -20,7 +22,7 @@ const layers = [
     "name": "BC Mosaic",
     "type": "Tile",
     "display": false,
-    "order": "2",
+    "order": 2,
     "source": 
       wms({
         url: "http://206.12.92.18:10191/geoserver/BCParks/wms",
@@ -36,22 +38,29 @@ const layers = [
   {
     "id": "landcover",
     "name": "ESRI 2020 Landcover",
-    "type": "Raster",
-    "display": false,
-    "order": "3",
-    "source": new TileArcGISRest({
-      url: "https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/" + "Esri_2020_Land_Cover_V2/ImageServer",
-      ratio: 1,
-      params: {'TOKEN': "P3ePLMYs2RVChkJx"}
+    "type": "Tile",
+    "display": true,
+    "order": 3,
+    "source": xyz({
+      "attributions": 'Copyright:© 2021 ESRI',
+      "ratio": 1,
+      "params": {},
+      "url": "https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/" +
+      "rest/services/Esri_2020_Land_Cover_V2/ImageServer/tile/{z}/{y}/{x}",
+      //"crossOrigin": null,
+      // "minZoom": 1,
+      // "maxZoom": 13,
+      "projection": 'EPSG:4326',
+      "transition": 0,
     })
-  },
+  }
 ];
  
 // import connect secrets
-require('dotenv').config();
+//require('dotenv').config();
 
 // connect postGIS DB
-//  const { Pool, Client } = require('pg');
+// const { Pool, Client } = require('pg');
 
 //test it (pull this out)
 //Client = new Client();
@@ -66,7 +75,6 @@ let geometries = require('./geometries.json');
 
 // import a single polygon
 let geometry = require('./geometry.json');
-
 
 
 class App extends Component{
@@ -110,7 +118,9 @@ class App extends Component{
   }
 
   render(){
-    let activeLayers = this.state.layers.filter(layer => layer.display)
+
+    let activeLayers = this.state.layers.filter(layer => layer.display);
+
     return (
       <div className="App">
           <Panel queryParcel={this.queryParcel}>
@@ -129,10 +139,9 @@ class App extends Component{
             {activeLayers.map(layer => {
               return (
                 <MapLayer 
-                  type={layer.type} 
-                  source={layer.source} 
                   key={"layer_"+layer.id}
-                  zIndex={layer.order}
+                  {...layer}
+                  projection={layer.source.projection}
                 />)
             })}
             <MapLayer 
