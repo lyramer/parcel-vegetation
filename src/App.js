@@ -81,11 +81,7 @@ class App extends Component{
   constructor(props) {
     super(props);    
     this.state = {
-      parcelInfo: `Mrs. Beaumont made me a slight compliment upon my recovery, for I had pleaded illness to excuse keeping my room: Lady Louisa spoke not a word; but Lord Orville, little imagining himself the cause of my indisposition, enquired concerning my health with the most distinguishing politeness. I hardly made any answer; and, for the first time since I have been here, contrived to sit at some distance from him.
-
-      I could not help observing that my reserve surprised him; yet he persisted in his civilities, and seemed to wish to remove it. But I paid him very little attention; and the moment breakfast was over, instead of taking a book, or walking in the garden, I retired to my own room.
-      
-      Soon after, Mrs. Selwyn came to tell me, that Lord Orville had been proposing I should take an airing, and persuading her to let him drive us both in his phaeton. She delivered the message with an archness that made me blush; and added, that an airing, in my Lord Orville's carriage, could not fail to revive my spirits. There is no possibility of escaping her discernment; she has frequently rallied me upon his Lordship's attention,-and, alas!-upon the pleasure with which I have received it! However, I absolutely refused the offer.`,
+      parcelInfo: `Still working on report format, but the SQL query is now working!`,
       parcelIDs: [],
       layers: [...layers]
     }
