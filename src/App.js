@@ -57,7 +57,7 @@ const layers = [
     "id": "landcover",
     "name": "ESRI 2020 Landcover",
     "type": "Tile",
-    "display": true,
+    "display": false,
     "order": 4,
     "source": xyz({
       "attributions": 'Copyright:© 2021 ESRI',
@@ -107,14 +107,14 @@ class App extends Component{
     }
   }
 
-  queryParcel = (parcelIDs) => {
-
-    this.setState({parcelIDs});
-
-    fetch("https://api.example.com/items")
+  queryParcel = (parcelID) => {
+    console.log("queryParcel for " + parcelID)
+    this.setState({parcelID});
+    fetch("http://206.12.92.18:10190/parcel/" + parcelID)
     .then(res => res.json())
     .then(
       (result) => {
+        console.log(result);
         this.setState({
           parcelsLoaded: true,
           items: result.items
