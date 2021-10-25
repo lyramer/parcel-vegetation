@@ -18,8 +18,8 @@ const layers = [
     "source": osm()
   },
   {
-    "id": "bcmosaic",
-    "name": "BC Mosaic",
+    "id": "bcmosaic2018",
+    "name": "BC Mosaic 2018",
     "type": "Tile",
     "display": false,
     "order": 2,
@@ -36,15 +36,35 @@ const layers = [
       }),
   },
   {
+    "id": "bcmosaic2020",
+    "name": "BC Mosaic 2020",
+    "type": "Tile",
+    "display": false,
+    "order": 3,
+    "source": 
+      wms({
+        url: "http://206.12.92.18:10191/geoserver/BCParks/wms",
+        params: {
+          'VERSION':"1.1.0",
+          'LAYERS':"BCParks:EDA_Mosaic_S2_L2A_BritishColumbia_2020_v1",
+          'SRS':"EPSG:3857",
+          'TILED':true
+        },
+        serverType: "geoserver"
+      }),
+  }, 
+  {
     "id": "landcover",
     "name": "ESRI 2020 Landcover",
     "type": "Tile",
     "display": true,
-    "order": 3,
+    "order": 4,
     "source": xyz({
       "attributions": 'Copyright:© 2021 ESRI',
       "ratio": 1,
-      "params": {},
+      "params": {
+        "FORMAT": "png"
+      },
       "url": "https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/" +
       "rest/services/Esri_2020_Land_Cover_V2/ImageServer/tile/{z}/{y}/{x}",
       //"crossOrigin": null,
