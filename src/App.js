@@ -6,7 +6,8 @@ import { osm, wms, toVector, xyz} from './Components/DataSources'
 import FeatureStyles from './Components/Map/FeatureStyles';
 import { fromLonLat } from 'ol/proj';
 import { TileArcGISRest, ImageArcGISRest } from 'ol/source';
-
+import * as api from './Database/api.js'
+import { getPixelIndexArray } from "ol/render/canvas/ExecutorGroup";
 
 const layers = [
   {
@@ -14,7 +15,7 @@ const layers = [
     "name": "Open Street Map",
     "type": "Tile",
     "display": true,
-    "order": 1,
+    "order": 0,
     "source": osm()
   },
   {
@@ -22,7 +23,7 @@ const layers = [
     "name": "BC Mosaic 2018",
     "type": "Tile",
     "display": false,
-    "order": 2,
+    "order": 0,
     "source": 
       wms({
         url: "http://206.12.92.18:10191/geoserver/BCParks/wms",
@@ -40,7 +41,7 @@ const layers = [
     "name": "BC Mosaic 2020",
     "type": "Tile",
     "display": false,
-    "order": 3,
+    "order": 0,
     "source": 
       wms({
         url: "http://206.12.92.18:10191/geoserver/BCParks/wms",
@@ -58,7 +59,7 @@ const layers = [
     "name": "ESRI 2020 Landcover",
     "type": "Tile",
     "display": false,
-    "order": 4,
+    "order": 0,
     "source": xyz({
       "attributions": 'Copyright:© 2021 ESRI',
       "ratio": 1,
@@ -101,32 +102,43 @@ class App extends Component{
   constructor(props) {
     super(props);    
     this.state = {
-      parcelInfo: `Still working on report format, but the SQL query is now working!`,
-      parcelIDs: [],
+      parcels: [],
+      queryError: '',
+      details: `Still working on report format, but the SQL query is now working!`,
       layers: [...layers]
     }
   }
 
   queryParcel = (parcelID) => {
+    parcelID = Number(parcelID);
+
     console.log("queryParcel for " + parcelID)
-    this.setState({parcelID});
-    fetch("http://206.12.92.18:10190/parcel/" + parcelID)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        console.log(result);
-        this.setState({
-          parcelsLoaded: true,
-          items: result.items
-        });
-      },
-      (error) => {
-        this.setState({
-          parcelsLoaded: true,
-          error
-        });
+    
+    let parcels = [...this.state.parcels];
+    
+    if (parcelID === 0 || parcelID === NaN) {
+      this.setState({queryError: 'Please specify a 9 digit Parcel ID'});
+      return;
+    } else if (parcels.find(({pid, ...feature}) => pid == parcelID)) {
+      this.setState({queryError: 'You already have searched for this parcel'});
+      return;
+    } else {
+      this.setState({queryError: ''});
+    }
+    
+    api.getParcelGeometry(parcelID).then(res => {
+      let geom = res[0].get_geojson ? {...res[0].get_geojson} : null;
+      let queryError = '';
+      if (!geom)  {
+        queryError = "No results found for parcelID '" + parcelID + "'";
+        this.setState({queryError});
+      } else {
+        parcels.push({...geom})
+        console.log("parcels", parcels)
+        this.setState({parcels: [...parcels]});
       }
-    )
+    }).catch(e => console.log(e))
+    
   }
 
   setLayers = (layers) => {
@@ -134,20 +146,23 @@ class App extends Component{
   }
 
   render(){
-
+    let activeParcels = [...this.state.parcels]
     let activeLayers = this.state.layers.filter(layer => layer.display);
 
     return (
       <div className="App">
           <Panel queryParcel={this.queryParcel}>
-            <ParcelIDForm queryParcel={this.queryParcel} />
+            <ParcelIDForm queryParcel={this.queryParcel} queryError={this.state.queryError}/>
             <LayerSelect layers={this.state.layers} setLayers={this.setLayers}/>
             <div className={"results-text"}>
+
               <div className={"results-id"} >
-                {this.state.parcelIDs}
+                {this.state.parcels.map(parcel => {
+                  return <span key={parcel.pid} className="pid">{parcel.pid}</span>
+                })}
               </div>
               <div className={"results-info"}>
-                {this.state.parcelInfo}
+                {this.state.details}
               </div>
             </div>
           </Panel>
@@ -160,6 +175,16 @@ class App extends Component{
                   projection={layer.source.projection}
                 />)
             })}
+
+            {activeParcels.map(parcel => {
+                  return (
+                    <MapLayer 
+                      type={"Vector"} 
+                      source={toVector(parcel, "EPSG:3005")} 
+                      style={FeatureStyles.MultiPolygon}
+                    />
+                  )
+                })}
             <MapLayer 
               type={"Vector"} 
               source={toVector(geometries, "EPSG:3857")} 

@@ -30,6 +30,11 @@ class ParcelIDForm extends React.Component {
             </label>
             <button type="submit" className="search" value="Search">
               <i className="fas fa-search"></i></button>
+              {this.props.queryError && 
+                  <div className="error">
+                    {this.props.queryError}
+                  </div>
+              }
         </form>
       );
     }

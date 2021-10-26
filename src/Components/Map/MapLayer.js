@@ -5,7 +5,7 @@ import Static from 'ol/source/ImageStatic';
 
 function MapLayer(props) {
 
-    const {type, source, projection, extent, display, style, zIndex=0, ...other} = props;
+    const {type, source, projection, extent, display, style, order=0, ...other} = props;
 
     // note that I'm specifically using a test against falsity
     // so that if you don't define display, it doesn't return falsey
@@ -19,15 +19,15 @@ function MapLayer(props) {
                 projection: props.projection,
                 imageExtent: props.extent,
             })
-            return (<RasterLayer source={img} zIndex={zIndex} />)
+            return (<RasterLayer source={img} zIndex={order} />)
         case "Vector":
-            return (<VectorLayer source={source} zIndex={zIndex} style={style}/>)
+            return (<VectorLayer source={source} zIndex={order} style={style}/>)
         case "Tile":
-            return (<TileLayer source={source} zIndex={zIndex} />)
+            return (<TileLayer source={source} zIndex={order} />)
         case "Raster":
-            return (<RasterLayer source={source} zIndex={zIndex} />)
+            return (<RasterLayer source={source} zIndex={order} />)
         case "XYZ":
-            return (<TileLayer source={source} zIndex={zIndex} />)
+            return (<TileLayer source={source} zIndex={3} />)
         default:
             return null;
     }

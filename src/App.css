@@ -55,3 +55,7 @@
   border: 1px solid lightgray;
 
 }
+
+.error {
+  color: rgb(187, 14, 14)
+}
