@@ -104,33 +104,36 @@ class App extends Component{
     this.state = {
       parcels: [],
       queryError: '',
-      details: `Still working on report format, but the SQL query is now working!`,
+      details: `Still working on report format, but the SQL query is now working! \n
+                ID's to search: 015417271 012479292 010511687`,
       layers: [...layers]
     }
   }
 
   queryParcel = (parcelID) => {
-    parcelID = Number(parcelID);
+    let cleanedPID = parcelID.replace('-', '');
+    cleanedPID = Number(cleanedPID);
 
-    console.log("queryParcel for " + parcelID)
+    console.log("queryParcel for " + cleanedPID)
     
     let parcels = [...this.state.parcels];
     
-    if (parcelID === 0 || parcelID === NaN) {
+    if (cleanedPID === 0 || cleanedPID === NaN) {
       this.setState({queryError: 'Please specify a 9 digit Parcel ID'});
       return;
-    } else if (parcels.find(({pid, ...feature}) => pid == parcelID)) {
+    } else if (parcels.find(({type, geometry, properties}) => properties.pid == cleanedPID)) {
       this.setState({queryError: 'You already have searched for this parcel'});
       return;
     } else {
       this.setState({queryError: ''});
     }
-    
-    api.getParcelGeometry(parcelID).then(res => {
+    mapConfig.extent = 
+
+    api.getParcelGeometry(cleanedPID).then(res => {
       let geom = res[0].get_geojson ? {...res[0].get_geojson} : null;
       let queryError = '';
       if (!geom)  {
-        queryError = "No results found for parcelID '" + parcelID + "'";
+        queryError = "No results found for cleanedPID '" + cleanedPID + "'";
         this.setState({queryError});
       } else {
         parcels.push({...geom})
@@ -148,7 +151,8 @@ class App extends Component{
   render(){
     let activeParcels = [...this.state.parcels]
     let activeLayers = this.state.layers.filter(layer => layer.display);
-
+    console.log(geometries)
+    console.log(geometry)
     return (
       <div className="App">
           <Panel queryParcel={this.queryParcel}>
@@ -158,7 +162,7 @@ class App extends Component{
 
               <div className={"results-id"} >
                 {this.state.parcels.map(parcel => {
-                  return <span key={parcel.pid} className="pid">{parcel.pid}</span>
+                  return <span key={parcel.properties.pid} className="pid-label">{parcel.properties.pid}</span>
                 })}
               </div>
               <div className={"results-info"}>
@@ -179,8 +183,9 @@ class App extends Component{
             {activeParcels.map(parcel => {
                   return (
                     <MapLayer 
+                      key={parcel.properties.pid}
                       type={"Vector"} 
-                      source={toVector(parcel, "EPSG:3005")} 
+                      source={toVector(parcel, "EPSG:3857")} 
                       style={FeatureStyles.MultiPolygon}
                     />
                   )
