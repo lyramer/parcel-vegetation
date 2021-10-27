@@ -58,7 +58,7 @@ class App extends Component{
     }
     
     api.getParcelGeometry(cleanedPID).then(res => {
-      let geom = res[0].get_geojson ? {...res[0].get_geojson} : null;
+      let geom = res[0].get_geojson1 ? {...res[0].get_geojson1} : null;
       let queryError = '';
       if (!geom)  {
         queryError = "No results found for cleanedPID '" + cleanedPID + "'";
