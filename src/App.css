@@ -59,3 +59,7 @@
 .error {
   color: rgb(187, 14, 14)
 }
+
+.pid-label {
+  display:block;
+}
