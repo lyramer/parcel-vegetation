@@ -52,7 +52,10 @@ const Map = ({ zoom, center, projection, extent, children}) => {
     useEffect(() => {
         if (!map) return;
 
-        map.getView().fit(extent)
+        map.getView().fit(extent, {
+            padding: [20,20,20,20],
+            duration: 1000
+        })
     }, [extent])
 
     return (

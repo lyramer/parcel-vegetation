@@ -1,6 +1,6 @@
 import { get } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON";
-import { Vector as VectorSource } from 'ol/source';
+import VectorSource from 'ol/source/Vector';
 
 function toVector(geojsonObject, projection="EPSG:3857") {
 	return new VectorSource({
