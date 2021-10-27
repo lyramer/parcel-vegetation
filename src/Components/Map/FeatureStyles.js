@@ -23,10 +23,10 @@ const FeatureStyles = {
   MultiPolygon: new Style({
     stroke: new Stroke({
       color: "blue",
-      width: 20,
+      width: 2,
     }),
     fill: new Fill({
-      color: "rgba(0, 0, 255, 0.8)",
+      color: "rgba(0, 0, 255, 0.4)",
     }),
   }),
 }
