@@ -1,5 +1,11 @@
 
 import { osm, wms, xyz} from './Components/DataSources'
+import { fromLonLat } from 'ol/proj';
+import {boundingExtent} from 'ol/extent';
+let mapConfig = require('./config.json');
+
+console.log(boundingExtent([fromLonLat([-125.7567579406564, 52.21061843150153], mapConfig.view.projection),fromLonLat([-125.68770670006346, 52.25167533087935], mapConfig.view.projection)]))
+
 
 export const dataLayers = [
     {
@@ -46,6 +52,35 @@ export const dataLayers = [
           serverType: "geoserver"
         }),
     }, 
+    {
+      id: "esri",
+      name: "ESRI Landcover",
+      type: "Tile",
+      display: false,
+      order: 0,
+      source: 
+        wms({
+          url: "http://206.12.92.18:10191/geoserver/BCParks/wms",
+          params: {
+            'VERSION':"1.1.0",
+            'LAYERS':"BCParks:esri",
+            'SRS':"EPSG:4326",
+            'TILED':true
+          },
+          serverType: "geoserver"
+        }),
+    }, 
+    // {
+    //   id: "highres",
+    //   name: "High Resolution Optical",
+    //   type: "Image",
+    //   display: false,
+    //   order: 0,
+    //   projection: "EPSG:4326",
+    //   source: '/assets/rainbow.png',
+    //   extent: boundingExtent([fromLonLat([-125.7567579406564, 52.21061843150153], mapConfig.view.projection),fromLonLat([-125.68770670006346, 52.25167533087935], mapConfig.view.projection)])
+
+    // }, 
     // {
     //   id: "landcover",
     //   name: "ESRI 2020 Landcover",

@@ -63,3 +63,7 @@
 .pid-label {
   display:block;
 }
+
+.report-table {
+  border: 1px solid black;
+}

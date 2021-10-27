@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import './App.css';
 import { Panel, ParcelIDForm, LayerSelect } from "./Components/Panel"
+import { Report } from "./Components/Report"
 import { Map, MapLayer} from './Components/Map';
 import { toVector } from './Components/DataSources'
 import FeatureStyles from './Components/Map/FeatureStyles';
 import { fromLonLat } from 'ol/proj';
-import { TileArcGISRest, ImageArcGISRest } from 'ol/source';
 import * as api from './Database/api.js'
 import { getPixelIndexArray } from "ol/render/canvas/ExecutorGroup";
 import { dataLayers } from "./dataLayers";
@@ -20,6 +20,20 @@ let geometries = require('./geometries.json');
 // import a single polygon
 let geometry = require('./geometry.json');
 
+const sampleReportData = [
+  {"tree_type" : "AcAt", "parcel_id" : 15296008, "parcel_area" : 647945.85, "intersect_area" : 30119.94},
+  {"tree_type" : "AcSx(At)", "parcel_id" : 15296008, "parcel_area" : 647945.85, "intersect_area" : 35275.56},
+  {"tree_type" : "Pli", "parcel_id" : 15296008, "parcel_area" : 647945.85, "intersect_area" : 114935.01},
+  {"tree_type" : "SxPl", "parcel_id" : 15296008, "parcel_area" : 647945.85, "intersect_area" : 3.26},
+  {"tree_type" : "At", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 105947.10},
+  {"tree_type" : "At(Sx)", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 915.40},
+  {"tree_type" : "Pli", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 238.74},
+  {"tree_type" : "Pli(At)", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 3764.73},
+  {"tree_type" : "Sx(Ac)", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 14716.23},
+  {"tree_type" : "Sx(At)", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 46182.02},
+  {"tree_type" : "SxAt", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 29413.62},
+  {"tree_type" : "Sx(PliBl)", "parcel_id" : 15327906, "parcel_area" : 647355.37, "intersect_area" : 62362.38}
+  ]
 
 class App extends Component{
   constructor(props) {
@@ -34,8 +48,8 @@ class App extends Component{
         }
       },
       queryError: '',
-      details: `Still working on report format, but the SQL query is now working! \n
-                ID's to search: 015417271 012479292 010511687`,
+      details: `ID's to search: 015417271 012479292 010511687`,
+      reportData: [],
       layers: [...dataLayers]
     }
   }
@@ -58,7 +72,7 @@ class App extends Component{
     }
     
     api.getParcelGeometry(cleanedPID).then(res => {
-      let geom = res[0].get_geojson ? {...res[0].get_geojson} : null;
+      let geom = res[0].get_geojson1 ? {...res[0].get_geojson1} : null;
       let queryError = '';
       if (!geom)  {
         queryError = "No results found for cleanedPID '" + cleanedPID + "'";
@@ -67,15 +81,21 @@ class App extends Component{
         features.push({...geom})
         collection.features = [...features]
         let ids = features.map(feature => feature.properties.pid)
+        let report = api.getVRIs(ids).then(res => {
+          console.log("got VRIS");
+          this.setState({
+            reportData: [...sampleReportData]
+          });
+        })
         this.setState({
           parcels: collection,
           mapExtent: toVector(collection).getExtent(),
           parcelIDs: ids
         });
         console.log(toVector(collection).getExtent());
+        return res
       }
     }).catch(e => console.log(e))
-    
   }
 
   setLayers = (layers) => {
@@ -100,6 +120,7 @@ class App extends Component{
               </div>
               <div className={"results-info"}>
                 {this.state.details}
+                <Report reportData={this.state.reportData}/>
               </div>
             </div>
           </Panel>
