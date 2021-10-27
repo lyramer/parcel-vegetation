@@ -26,6 +26,7 @@ class App extends Component{
     super(props);    
     this.state = {
       mapExtent: null,
+      parcelIDs: [],
       parcels: {
         type: "FeatureCollection",
         features: [],
@@ -42,8 +43,6 @@ class App extends Component{
   queryParcel = (parcelID) => {
     let cleanedPID = parcelID.replace('-', '');
     cleanedPID = Number(cleanedPID);
-
-    console.log("queryParcel for " + cleanedPID)
     
     let collection = {...this.state.parcels};
     let features = [...collection.features];
@@ -66,11 +65,12 @@ class App extends Component{
         this.setState({queryError});
       } else {
         features.push({...geom})
-        console.log("features", features)
         collection.features = [...features]
+        let ids = features.map(feature => feature.properties.pid)
         this.setState({
           parcels: collection,
-          mapExtent: toVector(collection).getExtent()
+          mapExtent: toVector(collection).getExtent(),
+          parcelIDs: ids
         });
         console.log(toVector(collection).getExtent());
       }
