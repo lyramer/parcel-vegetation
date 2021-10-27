@@ -9,7 +9,7 @@ import { defaults as defaultControls} from 'ol/control';
 
 import "./Map.css";
 
-const Map = ({ zoom, center, projection, children}) => {
+const Map = ({ zoom, center, projection, extent, children}) => {
 
     //  note that this means that the coordinates for the default map center
     // are stored in an array of length 2, where lon is first and lat second.
@@ -47,6 +47,13 @@ const Map = ({ zoom, center, projection, children}) => {
 
         map.getView().setCenter(center)
     }, [center])
+
+    // extent change handler
+    useEffect(() => {
+        if (!map) return;
+
+        map.getView().fit(extent)
+    }, [extent])
 
     return (
         <MapContext.Provider value={{ map }}>
